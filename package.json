@@ -1,0 +1,16 @@
+{
+  "name": "nodebasic",
+  "version": "1.0.0",
+  "description": "Simple Node js app",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "debug": "nodemon --inspect server.js"
+  },
+  "author": "Milan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4"
+  }
+}
