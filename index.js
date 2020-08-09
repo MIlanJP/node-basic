@@ -38,6 +38,11 @@ res.send(course)
 
 })
 
+app.get('/api/greeting/:name', (req, res) => {
+  const name=req.param.name;
+    res.send(`Welcome to Node JS ${req.params.name}`)
+})
+
 app.post("/api/course", (req, res) => {
   const course = {
     id: course.length + 1,
