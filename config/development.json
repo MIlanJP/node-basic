@@ -1,0 +1,6 @@
+{
+    "name":"dev basic node",
+    "mail":{
+        "host":"dev-mail-server"
+    }
+}

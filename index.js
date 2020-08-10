@@ -1,65 +1,59 @@
+const config=require('config')
+const log=require('./logger')
 const express = require("express");
 const app = express();
-const Joi=require("joi");
-const courses = [
-  { id: 1, name: "Rakesh" },
-  { id: 2, name: "Milan" },
-  { id: 3, name: "Mahesh" },
-];
+const routes=require('./routes/routes')
+const Joi = require("joi");
+const startupdebugger=require("debug")("app:startup");
+const dbdebugger=require('debug')("app:db")
+const greetingroutes=require('./routes/greeting')
+
+// Examples on configurations
+console.log("APP name : "+config.get('name'));
+console.log("Mail server : "+config.get('mail.host'));
+
+
 // IN APP we have methods like get post put delete
 // ('/') inside app.get() so this is how you define route
 
-app.use(express.json())
+
+// This express.json() is a middleware function and it will check whether request
+//  body has json then it will parse the req body in json
+app.use(express.json());
+
+// This is also a middleware function
+// This will help in getting values from key and value approach 
+app.use(express.urlencoded());
+
+/**
+ * Printing the environment in the console
+ */
+if(process.env.NODE_ENV==='development'){
+console.log('development environment')
+startupdebugger("development environment")
+}else{
+  console.log("production environment")
+startupdebugger("production environment")
+
+}
+
+dbdebugger("connected to database")
+
+// From this middleware we can serve the static files in the public folder
+app.use(express.static('public'))
+
+
+// app.use('/api/name',routes)
+// app.use('/api/names',routes)
+
+app.use('/api/greeting',greetingroutes)
 
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.get('/api/names',(req,res)=>{
-    res.send(courses)
-})
 
-app.get('/api/name/:id',(req,res)=>{
-  const course= courses.find(c=> c.id=== parseInt(req.params.id))
-    if(!course) res.status(404).send("THe given id was not found")
-    res.send(course)
-})
-
-app.post('/api/name',(req,res)=>{
-    if(!req.body.name||req.body.name.length<3){
-        res.status(400).send("Name is required and must be at atleast of 3 letters ")
-    }
-const course={
-    id:req.body.id,
-    name:req.body.name
-}
-courses.push(course)
-res.send(course)
-
-})
-
-app.get('/api/greeting/:name', (req, res) => {
-  const name=req.param.name;
-    res.send(`Welcome to Node JS ${req.params.name}`)
-})
-
-app.post("/api/course", (req, res) => {
-  const course = {
-    id: course.length + 1,
-    name: req.body.name,
-  };
-  courses.push(courses);
-  res.send(course);
-});
-
-app.get("/api/course/:Id", (req, res) => {
-  res.send(req.params.Id);
-});
-app.get("/api/course/:Id/:d", (req, res) => {
-  res.send(req.params);
-});
-
-const port = process.env.PORT || 3000;
+const port = process.env.PORT||3000;
 
 app.listen(port, () => {
   console.log(`Listening to port ${port}`);

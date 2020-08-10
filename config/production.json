@@ -1,0 +1,6 @@
+{
+    "name":"prod basic node",
+    "mail":{
+        "host":"prod-mail-server"
+    }
+}
